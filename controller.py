@@ -1,5 +1,5 @@
 import cv2
-from image_processor import ImageProcessor
+from image import Image
 
 # This class connects the GUI with image processing
 class AppController:
@@ -20,7 +20,7 @@ class AppController:
         self.history = [image.copy()]
         return image
 # Save new image after applying a filter
-     def apply(self, new_image):
+    def apply(self, new_image):
         self.history.append(new_image.copy())
         self.processor.set_image(new_image)
  # Clear redo when new change happens
