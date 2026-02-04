@@ -105,5 +105,23 @@ class ImageEditorGUI:
             image=self.tk_img,
             anchor=tk.CENTER
         )
+        
+        h, w = image.shape[:2]
+        self.status.config(text=f"Image Size: {w} x {h}")
+        
+    def open_image(self):
+        path = filedialog.askopenfilename(
+            filetypes=[("Image Files", "*.jpg *.png *.bmp")]
+        )
+        if path:
+            image = self.controller.load_image(path)
+            self.display(image)
+
+    def save_image(self):
+        path = filedialog.asksaveasfilename(defaultextension=".png")
+        if path:
+            cv2.imwrite(path, self.controller.processor.get_image())
+            messagebox.showinfo("Saved", "Image saved successfully")
+
 
 
