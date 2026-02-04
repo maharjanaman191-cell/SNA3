@@ -85,7 +85,7 @@ class ImageEditorGUI:
         )
         self.contrast.pack(fill=tk.X, padx=5)
         
-     def display(self, image):
+    def display(self, image):
        
         img = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         img = Image.fromarray(img)
@@ -93,7 +93,7 @@ class ImageEditorGUI:
         canvas_w = self.canvas.winfo_width()
         canvas_h = self.canvas.winfo_height()
          
-         if canvas_w > 1 and canvas_h > 1:
+        if canvas_w > 1 and canvas_h > 1:
             img.thumbnail((canvas_w, canvas_h))
 
         self.tk_img = ImageTk.PhotoImage(img)
