@@ -138,7 +138,7 @@ class ImageEditorGUI:
         self.display(
             self.controller.apply(cv2.cvtColor(img, cv2.COLOR_GRAY2BGR))
         )
-def rotate(self, angle):
+    def rotate(self, angle):
         img = self.controller.processor.rotate(angle)
         self.display(self.controller.apply(img))
 
