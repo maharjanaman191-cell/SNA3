@@ -169,7 +169,7 @@ class ImageEditorGUI:
         img = self.controller.processor.flip(mode)
         self.display(self.controller.apply(img))
         
- # Adjusts brightness using slider value
+# Adjusts brightness using slider value
     def adjust_brightness(self, value):
         img = self.controller.processor.adjust_brightness(int(value))
         self.display(img)
