@@ -72,7 +72,7 @@ class ImageEditorGUI:
 # Button to rotate the image by 90 degrees
         tk.Button(self.control_panel, text="Rotate 90°",command=lambda: self.rotate(90)).pack(fill=tk.X, padx=5, pady=2)
         
-  # Button to flip the image horizontally
+# Button to flip the image horizontally
         tk.Button(self.control_panel, text="Flip Horizontal",command=lambda: self.flip("Horizontal")).pack(fill=tk.X, padx=5, pady=2)
         
 # Slider to control brightness level
@@ -124,6 +124,8 @@ class ImageEditorGUI:
         self.status.config(text=f"Image Size: {w} x {h}")
         
     def open_image(self):
+        
+# Opens file dialog to select an image
         path = filedialog.askopenfilename(
             filetypes=[("Image Files", "*.jpg *.png *.bmp")]
         )
@@ -132,45 +134,56 @@ class ImageEditorGUI:
             self.display(image)
 
     def save_image(self):
+        
+# Saves the edited image to selected location
         path = filedialog.asksaveasfilename(defaultextension=".png")
         if path:
             cv2.imwrite(path, self.controller.processor.get_image())
             messagebox.showinfo("Saved", "Image saved successfully")
-
+            
+# Converts image to grayscale
     def grayscale(self):
         img = self.controller.processor.grayscale()
         self.display(
             self.controller.apply(cv2.cvtColor(img, cv2.COLOR_GRAY2BGR))
         )
-
+# Applies blur effect to the image
     def blur(self, value):
         img = self.controller.processor.blur(value)
         self.display(self.controller.apply(img))
-
+        
+# Detects edges in the image
     def edges(self):
         img = self.controller.processor.edge_detection()
         self.display(
             self.controller.apply(cv2.cvtColor(img, cv2.COLOR_GRAY2BGR))
         )
+        
+# Rotates image by given angle
     def rotate(self, angle):
         img = self.controller.processor.rotate(angle)
         self.display(self.controller.apply(img))
-
+        
+# Applies blur effect to the image
     def flip(self, mode):
         img = self.controller.processor.flip(mode)
         self.display(self.controller.apply(img))
-
+        
+ # Adjusts brightness using slider value
     def adjust_brightness(self, value):
         img = self.controller.processor.adjust_brightness(int(value))
         self.display(img)
-
+        
+# Adjusts contrast using slider value
     def adjust_contrast(self, value):
         img = self.controller.processor.adjust_contrast(int(value))
         self.display(img)
-
+        
+# Reverts to the previous image state
     def undo(self):
         self.display(self.controller.undo())
-
+        
+# Restores the last undone action
     def redo(self):
         self.display(self.controller.redo())
 
