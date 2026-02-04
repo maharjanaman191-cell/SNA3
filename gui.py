@@ -60,12 +60,22 @@ class ImageEditorGUI:
         self.root.config(menu=menu)
 
     def create_controls(self):
+ # Button to convert image to grayscale
         tk.Button(self.control_panel, text="Grayscale",command=self.grayscale).pack(fill=tk.X, padx=5, pady=2)
+        
+# Button to blur the image        
         tk.Button(self.control_panel, text="Blur",command=lambda: self.blur(5)).pack(fill=tk.X, padx=5, pady=2)
+        
+ # Button to detect edges in the image
         tk.Button(self.control_panel, text="Edges",command=self.edges).pack(fill=tk.X, padx=5, pady=2)
+        
+# Button to rotate the image by 90 degrees
         tk.Button(self.control_panel, text="Rotate 90°",command=lambda: self.rotate(90)).pack(fill=tk.X, padx=5, pady=2)
+        
+  # Button to flip the image horizontally
         tk.Button(self.control_panel, text="Flip Horizontal",command=lambda: self.flip("Horizontal")).pack(fill=tk.X, padx=5, pady=2)
-
+        
+# Slider to control brightness level
         tk.Label(self.control_panel, text="Brightness").pack(pady=(10, 0))
         self.brightness = tk.Scale(
             self.control_panel,
@@ -74,7 +84,8 @@ class ImageEditorGUI:
             command=self.adjust_brightness
         )
         self.brightness.pack(fill=tk.X, padx=5)
-
+        
+# Slider to control contrast level
         tk.Label(self.control_panel, text="Contrast").pack(pady=(10, 0))
         self.contrast = tk.Scale(
             self.control_panel,
