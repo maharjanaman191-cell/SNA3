@@ -123,5 +123,37 @@ class ImageEditorGUI:
             cv2.imwrite(path, self.controller.processor.get_image())
             messagebox.showinfo("Saved", "Image saved successfully")
 
+    def grayscale(self):
+        img = self.controller.processor.grayscale()
+        self.display(
+            self.controller.apply(cv2.cvtColor(img, cv2.COLOR_GRAY2BGR))
+        )
+
+    def blur(self, value):
+        img = self.controller.processor.blur(value)
+        self.display(self.controller.apply(img))
+
+    def edges(self):
+        img = self.controller.processor.edge_detection()
+        self.display(
+            self.controller.apply(cv2.cvtColor(img, cv2.COLOR_GRAY2BGR))
+        )
+def rotate(self, angle):
+        img = self.controller.processor.rotate(angle)
+        self.display(self.controller.apply(img))
+
+    def flip(self, mode):
+        img = self.controller.processor.flip(mode)
+        self.display(self.controller.apply(img))
+
+    def adjust_brightness(self, value):
+        img = self.controller.processor.adjust_brightness(int(value))
+        self.display(img)
+
+    def adjust_contrast(self, value):
+        img = self.controller.processor.adjust_contrast(int(value))
+        self.display(img)
+
+
 
 
