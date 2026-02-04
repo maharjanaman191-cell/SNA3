@@ -29,5 +29,28 @@ class ImageEditorGUI:
             relief=tk.SUNKEN
         )
         self.status.pack(side=tk.BOTTOM, fill=tk.X)
+        
+        self.create_menu()
+        self.create_controls()
+        
+    def create_menu(self):
+        menu = tk.Menu(self.root)
+
+        file_menu = tk.Menu(menu, tearoff=0)
+        file_menu.add_command(label="Open", command=self.open_image)
+        file_menu.add_command(label="Save As", command=self.save_image)
+        file_menu.add_separator()
+        file_menu.add_command(label="Exit", command=self.root.quit)
+
+        edit_menu = tk.Menu(menu, tearoff=0)
+        edit_menu.add_command(label="Undo", command=self.undo)
+        edit_menu.add_command(label="Redo", command=self.redo)
+
+        menu.add_cascade(label="File", menu=file_menu)
+        menu.add_cascade(label="Edit", menu=edit_menu)
+
+        self.root.config(menu=menu)
+
+
 
 
