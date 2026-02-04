@@ -10,7 +10,7 @@ class ImageEditorGUI:
         self.root.title("HIT137 Image Editor")
         self.root.geometry("1000x600")
         
-         self.main = tk.Frame(self.root)
+        self.main = tk.Frame(self.root)
         self.main.pack(fill=tk.BOTH, expand=True)
         
         self.canvas_frame = tk.Frame(self.main, bg="black")
