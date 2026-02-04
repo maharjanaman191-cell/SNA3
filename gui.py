@@ -96,18 +96,22 @@ class ImageEditorGUI:
         self.contrast.pack(fill=tk.X, padx=5)
         
     def display(self, image):
-       
+        
+# Convert image from OpenCV format to Tkinter format     
         img = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         img = Image.fromarray(img)
-
+        
+# Getting canvas width and height
         canvas_w = self.canvas.winfo_width()
         canvas_h = self.canvas.winfo_height()
-         
+        
+# Resize image to fit inside the canvas       
         if canvas_w > 1 and canvas_h > 1:
             img.thumbnail((canvas_w, canvas_h))
 
         self.tk_img = ImageTk.PhotoImage(img)
-
+        
+# Clearing previous image and displaying new one
         self.canvas.delete("all")
         self.canvas.create_image(
             canvas_w // 2,
@@ -115,7 +119,7 @@ class ImageEditorGUI:
             image=self.tk_img,
             anchor=tk.CENTER
         )
-        
+# Displaying image size in the status bar      
         h, w = image.shape[:2]
         self.status.config(text=f"Image Size: {w} x {h}")
         
