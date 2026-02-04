@@ -75,3 +75,14 @@ class ImageEditorGUI:
             command=self.adjust_brightness
         )
         self.brightness.pack(fill=tk.X, padx=5)
+
+        tk.Label(self.control_panel, text="Contrast").pack(pady=(10, 0))
+        self.contrast = tk.Scale(
+            self.control_panel,
+            from_=1, to=100,
+            orient=tk.HORIZONTAL,
+            command=self.adjust_contrast
+        )
+        self.contrast.pack(fill=tk.X, padx=5)
+
+        
