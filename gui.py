@@ -160,22 +160,4 @@ class ImageEditorGUI:
     def redo(self):
         self.display(self.controller.redo())
 
-    main 
-    if __name__ == "__main__":
-        root = tk.Tk()
-        controller = AppController()
-        app = ImageEditorGUI(root, controller)
-        root.mainloop()
-        import tkinter as tk
-        from tkinter import filedialog, messagebox
-        from PIL import Image, ImageTk
-        import cv2
-
-    class ImageEditorGUI:
-    def __init__(self, root, controller):
-        self.root = root
-        self.controller = controller
-        self.root.title("HIT137 Image Editor")
-        self.root.geometry("1000x600")
-
 
