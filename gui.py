@@ -2,6 +2,8 @@ import tkinter as tk
 from tkinter import filedialog, messagebox
 from PIL import Image, ImageTk
 import cv2
+import os 
+
 
 class ImageEditorGUI:
     def __init__(self, root, controller):
@@ -94,6 +96,17 @@ class ImageEditorGUI:
             command=self.adjust_contrast
         )
         self.contrast.pack(fill=tk.X, padx=5)
+
+# Slider to resize the image  
+        tk.Label(self.control_panel, text="Resize (%)").pack(pady=(10, 0))
+        self.resize_slider = tk.Scale(
+            self.control_panel,
+            from_=50, to=200,
+            orient=tk.HORIZONTAL,
+            command=self.resize_image
+        )
+        self.resize_slider.set(100)
+        self.resize_slider.pack(fill=tk.X, padx=5)
         
     def display(self, image):
         
@@ -133,6 +146,11 @@ class ImageEditorGUI:
             image = self.controller.load_image(path)
             self.display(image)
 
+# Filename display
+            h, w = image.shape[:2]
+            filename = os.path.basename(path)
+            self.status.config(text=f"{filename} | {w} x {h}")
+
     def save_image(self):
         
 # Saves the edited image to selected location
@@ -147,6 +165,7 @@ class ImageEditorGUI:
         self.display(
             self.controller.apply(cv2.cvtColor(img, cv2.COLOR_GRAY2BGR))
         )
+
 # Applies blur effect to the image
     def blur(self, value):
         img = self.controller.processor.blur(value)
@@ -172,12 +191,18 @@ class ImageEditorGUI:
 # Adjusts brightness using slider value
     def adjust_brightness(self, value):
         img = self.controller.processor.adjust_brightness(int(value))
-        self.display(img)
+        self.display(self.controller.apply(img))  
         
 # Adjusts contrast using slider value
     def adjust_contrast(self, value):
         img = self.controller.processor.adjust_contrast(int(value))
-        self.display(img)
+        self.display(self.controller.apply(img))   
+
+# Resize function 
+    def resize_image(self, value):
+        scale = int(value) / 100
+        img = self.controller.processor.resize(scale)
+        self.display(self.controller.apply(img))
         
 # Reverts to the previous image state
     def undo(self):
