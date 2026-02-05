@@ -2,8 +2,7 @@ This is assignment 3 done by group 27.
 AMAN MAHARJAN S397440 
 RISHI CHUAULAGAIN S397674
 AVISHKAR GIRI I DONT KNOW HIS STUDENT NUMBER BECAUSE I HAVENT GOT CONTACT WITH HIM AND THIS ASSIGNMENT IS DONE BY ME AMAN MAHARJAN AND RISHI CHAULAGAIN WE CONTRIBUTED EQUALLY BUT HAVENT HEARD FROM AVUSHKAR GIRI
-We also have less commit due to that 
-The git hub link is https://github.com/maharjanaman191-cell/SNA3/tree/main 
+We also have less commit due to that.
 
 GUI Code (gui.py)
 Manages the graphical user interface and lets users utilise buttons, sliders, and menus to engage with picture editing tools.
