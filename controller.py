@@ -1,9 +1,22 @@
 import cv2
 from image import Image
 
+"""
+AppController Class
+
+This class works as a middle layer between the GUI and image processing class.
+
+It controls how images are loaded, edited, and stored.
+It also manages undo and redo operations by saving image history.
+"""
+
 # This class connects the GUI with image processing
 class AppController:
 
+    """
+    Constructor that creates the image processor object
+    and prepares lists to store image history for undo and redo.
+    """
 # Create Image object
     def __init__(self):
         self.processor = Image()
@@ -14,6 +27,12 @@ class AppController:
 # store redo image 
         self.redo_stack = []
 
+
+    """
+    Loads an image from the computer and stores it inside the processor.
+
+    Also saves the original image so undo can return to it.
+    """
 # load image from computer
     def load_image(self, path):
         image = cv2.imread(path)
@@ -25,6 +44,13 @@ class AppController:
         self.history = [image.copy()]
         return image
     
+
+    """
+    Saves edited image after applying any filter.
+
+    Stores the new image in history and clears redo stack
+    because a new action has been performed.
+    """
 # Save new image after applying a filter
     def apply(self, new_image):
         self.history.append(new_image.copy())
@@ -34,6 +60,12 @@ class AppController:
         self.redo_stack.clear()
         return new_image
     
+
+    """
+    Returns image to previous editing state.
+
+    Moves last image from history into redo stack.
+    """
 # Go back to previous image
     def undo(self):
         if len(self.history) > 1:
@@ -41,6 +73,12 @@ class AppController:
             self.processor.set_image(self.history[-1])
         return self.processor.get_image()
 
+
+    """
+    Restores last undone change.
+
+    Moves image from redo stack back into history.
+    """
 # Go forward to undone image
     def redo(self):
         if self.redo_stack:
