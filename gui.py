@@ -2,34 +2,49 @@ import tkinter as tk
 from tkinter import filedialog, messagebox
 from PIL import Image, ImageTk
 import cv2
-import os 
+import os
 
 
+"""
+This class handles the main window of the image editor.
+
+It creates the layout of the program including:
+- Menu bar
+- Buttons and sliders
+- Canvas where image is displayed
+- Status bar
+
+It also connects user actions to the controller so that
+image processing functions can run.
+"""
 class ImageEditorGUI:
+
+
+    """
+    This function runs when the GUI starts.
+
+    It builds the window layout, creates frames for image display
+    and control panel, and prepares menu and control buttons.
+    """
     def __init__(self, root, controller):
         self.root = root
         self.controller = controller
-# Setting the title and size of the application window
+
         self.root.title("HIT137 Image Editor")
         self.root.geometry("1000x600")
         
-# Main frame that holds all other components     
         self.main = tk.Frame(self.root)
         self.main.pack(fill=tk.BOTH, expand=True)
 
-# Left side frame used to display the image      
         self.canvas_frame = tk.Frame(self.main, bg="black")
         self.canvas_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         
- # Canvas where the image is shown
         self.canvas = tk.Canvas(self.canvas_frame, bg="black")
         self.canvas.pack(fill=tk.BOTH, expand=True)
         
-# Right side panel that contains buttons and sliders
         self.control_panel = tk.Frame(self.main, width=220)
         self.control_panel.pack(side=tk.RIGHT, fill=tk.Y)
         
-# Status bar to show image information
         self.status = tk.Label(
             self.root,
             text="No image loaded",
@@ -41,16 +56,22 @@ class ImageEditorGUI:
         self.create_menu()
         self.create_controls()
         
+
+    """
+    Creates the menu bar at the top of the window.
+
+    The menu allows users to open images, save images,
+    and use undo/redo options.
+    """
     def create_menu(self):
         menu = tk.Menu(self.root)
- # File menu options
+
         file_menu = tk.Menu(menu, tearoff=0)
         file_menu.add_command(label="Open", command=self.open_image)
         file_menu.add_command(label="Save As", command=self.save_image)
         file_menu.add_separator()
         file_menu.add_command(label="Exit", command=self.root.quit)
         
-# Edit menu options
         edit_menu = tk.Menu(menu, tearoff=0)
         edit_menu.add_command(label="Undo", command=self.undo)
         edit_menu.add_command(label="Redo", command=self.redo)
@@ -58,26 +79,27 @@ class ImageEditorGUI:
         menu.add_cascade(label="File", menu=file_menu)
         menu.add_cascade(label="Edit", menu=edit_menu)
 
- # Adding menus to the menu bar
         self.root.config(menu=menu)
 
+
+    """
+    This function creates all buttons and sliders on the right side.
+
+    These controls allow users to apply filters and adjust image settings
+    such as brightness, contrast and resizing.
+    """
     def create_controls(self):
- # Button to convert image to grayscale
+
         tk.Button(self.control_panel, text="Grayscale",command=self.grayscale).pack(fill=tk.X, padx=5, pady=2)
         
-# Button to blur the image        
         tk.Button(self.control_panel, text="Blur",command=lambda: self.blur(5)).pack(fill=tk.X, padx=5, pady=2)
         
- # Button to detect edges in the image
         tk.Button(self.control_panel, text="Edges",command=self.edges).pack(fill=tk.X, padx=5, pady=2)
         
-# Button to rotate the image by 90 degrees
         tk.Button(self.control_panel, text="Rotate 90°",command=lambda: self.rotate(90)).pack(fill=tk.X, padx=5, pady=2)
         
-# Button to flip the image horizontally
         tk.Button(self.control_panel, text="Flip Horizontal",command=lambda: self.flip("Horizontal")).pack(fill=tk.X, padx=5, pady=2)
         
-# Slider to control brightness level
         tk.Label(self.control_panel, text="Brightness").pack(pady=(10, 0))
         self.brightness = tk.Scale(
             self.control_panel,
@@ -87,7 +109,6 @@ class ImageEditorGUI:
         )
         self.brightness.pack(fill=tk.X, padx=5)
         
-# Slider to control contrast level
         tk.Label(self.control_panel, text="Contrast").pack(pady=(10, 0))
         self.contrast = tk.Scale(
             self.control_panel,
@@ -97,7 +118,6 @@ class ImageEditorGUI:
         )
         self.contrast.pack(fill=tk.X, padx=5)
 
-# Slider to resize the image  
         tk.Label(self.control_panel, text="Resize (%)").pack(pady=(10, 0))
         self.resize_slider = tk.Scale(
             self.control_panel,
@@ -108,23 +128,26 @@ class ImageEditorGUI:
         self.resize_slider.set(100)
         self.resize_slider.pack(fill=tk.X, padx=5)
         
+
+    """
+    Displays the image inside the canvas.
+
+    The image is converted into a format that Tkinter can show,
+    resized to fit the canvas, and then drawn in the centre.
+    """
     def display(self, image):
         
-# Convert image from OpenCV format to Tkinter format     
         img = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         img = Image.fromarray(img)
         
-# Getting canvas width and height
         canvas_w = self.canvas.winfo_width()
         canvas_h = self.canvas.winfo_height()
         
-# Resize image to fit inside the canvas       
         if canvas_w > 1 and canvas_h > 1:
             img.thumbnail((canvas_w, canvas_h))
 
         self.tk_img = ImageTk.PhotoImage(img)
         
-# Clearing previous image and displaying new one
         self.canvas.delete("all")
         self.canvas.create_image(
             canvas_w // 2,
@@ -132,13 +155,16 @@ class ImageEditorGUI:
             image=self.tk_img,
             anchor=tk.CENTER
         )
-# Displaying image size in the status bar      
+
         h, w = image.shape[:2]
         self.status.config(text=f"Image Size: {w} x {h}")
         
+
+    """
+    Opens an image from the user's computer and shows it in the editor.
+    """
     def open_image(self):
         
-# Opens file dialog to select an image
         path = filedialog.askopenfilename(
             filetypes=[("Image Files", "*.jpg *.png *.bmp")]
         )
@@ -146,69 +172,78 @@ class ImageEditorGUI:
             image = self.controller.load_image(path)
             self.display(image)
 
-# Filename display
             h, w = image.shape[:2]
             filename = os.path.basename(path)
             self.status.config(text=f"{filename} | {w} x {h}")
 
+
+    """
+    Saves the current edited image to a selected location.
+    """
     def save_image(self):
         
-# Saves the edited image to selected location
         path = filedialog.asksaveasfilename(defaultextension=".png")
         if path:
             cv2.imwrite(path, self.controller.processor.get_image())
             messagebox.showinfo("Saved", "Image saved successfully")
             
-# Converts image to grayscale
+
+    """Turns the image into black and white."""
     def grayscale(self):
         img = self.controller.processor.grayscale()
-        self.display(
-            self.controller.apply(cv2.cvtColor(img, cv2.COLOR_GRAY2BGR))
-        )
+        self.display(self.controller.apply(cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)))
 
-# Applies blur effect to the image
+
+    """Applies blur effect to make image smoother."""
     def blur(self, value):
         img = self.controller.processor.blur(value)
         self.display(self.controller.apply(img))
         
-# Detects edges in the image
+
+    """Detects object edges inside the image."""
     def edges(self):
         img = self.controller.processor.edge_detection()
-        self.display(
-            self.controller.apply(cv2.cvtColor(img, cv2.COLOR_GRAY2BGR))
-        )
+        self.display(self.controller.apply(cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)))
         
-# Rotates image by given angle
+
+    """Rotates image by selected angle."""
     def rotate(self, angle):
         img = self.controller.processor.rotate(angle)
         self.display(self.controller.apply(img))
         
-# Applies blur effect to the image
+
+    """Flips image like a mirror."""
     def flip(self, mode):
         img = self.controller.processor.flip(mode)
         self.display(self.controller.apply(img))
         
-# Adjusts brightness using slider value
+
+    """Changes brightness using slider."""
     def adjust_brightness(self, value):
         img = self.controller.processor.adjust_brightness(int(value))
-        self.display(self.controller.apply(img))  
+        self.display(self.controller.apply(img))
         
-# Adjusts contrast using slider value
+
+    """Changes contrast using slider."""
     def adjust_contrast(self, value):
         img = self.controller.processor.adjust_contrast(int(value))
-        self.display(self.controller.apply(img))   
+        self.display(self.controller.apply(img))
+        
 
-# Resize function 
+    """Resizes the image based on slider percentage."""
     def resize_image(self, value):
         scale = int(value) / 100
         img = self.controller.processor.resize(scale)
         self.display(self.controller.apply(img))
         
-# Reverts to the previous image state
+
+    """Returns image to previous state."""
     def undo(self):
         self.display(self.controller.undo())
         
-# Restores the last undone action
+
+    """Reapplies last undone change."""
     def redo(self):
         self.display(self.controller.redo())
+
 
