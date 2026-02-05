@@ -187,4 +187,3 @@ class ImageEditorGUI:
     def redo(self):
         self.display(self.controller.redo())
 
-
